@@ -22,6 +22,14 @@ import {
 } from '../api/client';
 import type { ConversationSummary, HistoryEntry } from '../api/client';
 
+// Detect Electron overlay — preload.js exposes window.electronAPI
+declare global {
+  interface Window {
+    electronAPI?: { isElectron: boolean; collapseWindow: () => void; expandWindow: () => void };
+  }
+}
+const isElectron = typeof window !== 'undefined' && !!window.electronAPI?.isElectron;
+
 type Message = { id: number; text: string; timestamp: string; type: 'question' | 'answer'; source?: string; sourceAbsPath?: string; model?: string };
 type HistoryItem = { id: number; question: string; time: string; messages: Message[]; outOfScope?: boolean; model?: string };
 
@@ -328,13 +336,13 @@ export default function App() {
   return (
     <div className="w-full h-screen flex bg-gray-50 relative">
       {isCollapsed ? (
-        /* Collapsed View */
-        <div className="w-1/4 h-1/4 flex flex-col min-h-0 shadow-lg rounded-lg overflow-hidden relative">
+        /* Collapsed View — fills the resized Electron window */
+        <div className="w-full h-full flex flex-col min-h-0 shadow-lg rounded-lg overflow-hidden relative">
           <div className="flex items-center gap-2 px-4 py-2 bg-white border-b border-gray-200">
             <ImageWithFallback src={logoIcon} alt="Logo" className="w-6 h-6" />
             <span className="text-xs text-gray-700 font-bold truncate flex-1">{messages.find(m => m.type === 'question')?.text ?? ''}</span>
             <button
-              onClick={() => setIsCollapsed(false)}
+              onClick={() => { setIsCollapsed(false); window.electronAPI?.expandWindow(); }}
               className="p-1.5 bg-teal-50 border border-teal-200 rounded-lg hover:bg-teal-100 transition-colors shadow-sm flex-shrink-0"
               title="Expand"
             >
@@ -374,10 +382,10 @@ export default function App() {
         </div>
       ) : (
         <>
-          {/* Collapse Button */}
-          {!isFirstTime && (
+          {/* Collapse Button — overlay only, hidden in browser */}
+          {!isFirstTime && isElectron && (
             <button
-              onClick={() => setIsCollapsed(true)}
+              onClick={() => { setIsCollapsed(true); window.electronAPI?.collapseWindow(); }}
               className="absolute top-4 left-4 z-30 p-2 bg-teal-50 border border-teal-200 rounded-lg hover:bg-teal-100 transition-colors shadow-sm"
               title="Collapse"
             >
