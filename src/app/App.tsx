@@ -326,7 +326,7 @@ export default function App() {
   };
 
   return (
-    <div className="w-full h-[50vh] flex bg-gray-50 relative">
+    <div className="w-full h-screen flex bg-gray-50 relative">
       {isCollapsed ? (
         /* Collapsed View */
         <div className="w-1/4 h-1/4 flex flex-col min-h-0 shadow-lg rounded-lg overflow-hidden relative">
