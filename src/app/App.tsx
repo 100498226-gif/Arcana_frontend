@@ -59,7 +59,7 @@ function summaryToHistoryItem(c: ConversationSummary): HistoryItem {
 export default function App() {
   const [inputValue, setInputValue] = useState('');
   const [followUpValue, setFollowUpValue] = useState('');
-  const [selectedModel, setSelectedModel] = useState('Qwen 2.5');
+  const [selectedModel, setSelectedModel] = useState('Qwen 3');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeHistoryId, setActiveHistoryId] = useState<number | null>(null);
   const [activeConversationId, setActiveConversationId] = useState<number | null>(null);
@@ -84,7 +84,7 @@ export default function App() {
   const abortControllerRef = useRef<AbortController | null>(null);
 
   const getModelIcon = (model: string) => {
-    return model === 'Qwen 2.5' ? geminiIcon : qwenIcon;
+    return model === 'Qwen 3' ? geminiIcon : qwenIcon;
   };
 
   const loadHistory = useCallback(async () => {
@@ -433,8 +433,8 @@ export default function App() {
                             backgroundSize: '16px 16px'
                           }}
                         >
-                          <option value="Qwen 2.5">Qwen 2.5</option>
-                          <option value="Gemini 2.5 Flash-Lite">Gemini 2.5 Flash-Lite</option>
+                          <option value="Qwen 3">Qwen 3</option>
+                          <option value="Gemma 4">Gemma 4</option>
                         </select>
                         <ChevronDown className="absolute right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 text-gray-400 pointer-events-none" />
                       </div>
