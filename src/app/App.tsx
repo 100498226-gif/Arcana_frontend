@@ -140,7 +140,6 @@ export default function App() {
       setActiveHistoryId(null);
       if (isFirstTime) {
         setIsFirstTime(false);
-        setSidebarOpen(true);
       }
     } else {
       setMessages(prev => [...prev, newQuestion]);
@@ -261,7 +260,6 @@ export default function App() {
     if (item.model) setSelectedModel(item.model);
     if (isFirstTime) {
       setIsFirstTime(false);
-      setSidebarOpen(true);
     }
 
     if (item.outOfScope) {
