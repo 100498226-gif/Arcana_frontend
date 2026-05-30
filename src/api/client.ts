@@ -76,7 +76,7 @@ export async function streamQuery(
           } else if (eventType === 'done') {
             callbacks.onDone(payload as QueryDonePayload);
           } else if (eventType === 'out_of_scope') {
-            callbacks.onOutOfScope(payload.conversation_id ?? null);
+            callbacks.onOutOfScope(payload.conversation_id ?? null, payload.search_query ?? '');
           } else if (eventType === 'error') {
             callbacks.onError(payload.message ?? 'Unknown error');
           }

@@ -66,6 +66,7 @@ export default function App() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [historyItems, setHistoryItems] = useState<HistoryItem[]>([]);
   const [showScopeDialog, setShowScopeDialog] = useState(false);
+  const [outOfScopeSearchQuery, setOutOfScopeSearchQuery] = useState('');
   const [showInternetOptions, setShowInternetOptions] = useState(false);
   const [showComingSoon, setShowComingSoon] = useState(false);
   const [isFirstTime, setIsFirstTime] = useState(true);
@@ -185,9 +186,10 @@ export default function App() {
         setIsStreaming(false);
         abortControllerRef.current = null;
       },
-      onOutOfScope(conversationId) {
+      onOutOfScope(conversationId, searchQuery) {
         setMessages(prev => prev.filter(m => m.id !== streamingId));
         setActiveConversationId(conversationId);
+        setOutOfScopeSearchQuery(searchQuery);
         setShowScopeDialog(true);
         loadHistory();
         setIsStreaming(false);
@@ -582,7 +584,7 @@ export default function App() {
                             <p className="text-sm text-gray-700 mb-3">Search with:</p>
                             <div className="flex flex-col gap-2">
                               {[
-                                { label: 'Google Browser', url: 'https://www.google.com/search?q=' + encodeURIComponent(messages.find(m => m.type === 'question')?.text ?? ''), icon: googleIcon },
+                                { label: 'Google Browser', url: 'https://www.google.com/search?q=' + encodeURIComponent(outOfScopeSearchQuery), icon: googleIcon },
                                 { label: 'ChatGPT', url: 'https://chat.openai.com/', icon: chatgptIcon },
                                 { label: 'Claude', url: 'https://claude.ai/', icon: claudeIcon },
                               ].map(({ label, url, icon }) => (

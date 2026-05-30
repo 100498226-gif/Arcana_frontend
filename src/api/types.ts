@@ -40,6 +40,6 @@ export interface UploadResult {
 export interface StreamCallbacks {
   onChunk: (text: string) => void;
   onDone: (payload: QueryDonePayload) => void;
-  onOutOfScope: (conversationId: number) => void;
+  onOutOfScope: (conversationId: number, searchQuery: string) => void;
   onError: (message: string) => void;
 }
