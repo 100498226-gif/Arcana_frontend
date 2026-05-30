@@ -186,13 +186,20 @@ export default function App() {
         abortControllerRef.current = null;
       },
       onOutOfScope(conversationId, searchQuery) {
-        setMessages(prev => prev.filter(m => m.id !== streamingId));
+        // Keep the streamed message visible. If nothing was streamed (legacy OOS
+        // path where the backend skipped straight to out_of_scope), drop the
+        // empty placeholder so the chat doesn't show a blank answer card.
+        setMessages(prev => prev.flatMap(m => {
+          if (m.id !== streamingId) return [m];
+          return m.text.trim() === '' ? [] : [m];
+        }));
         setActiveConversationId(conversationId);
         setOutOfScopeSearchQuery(searchQuery);
-        setShowScopeDialog(true);
         loadHistory();
         setIsStreaming(false);
         abortControllerRef.current = null;
+        // Delay the dial box so the user has time to read the streamed message.
+        setTimeout(() => setShowScopeDialog(true), 1500);
       },
       onError(message) {
         setMessages(prev => prev.map(m =>
@@ -262,19 +269,6 @@ export default function App() {
       setIsFirstTime(false);
     }
 
-    if (item.outOfScope) {
-      // Show just the question with the scope dialog
-      setMessages([{
-        id: 1,
-        text: item.question,
-        timestamp: '',
-        type: 'question',
-        model: item.model,
-      }]);
-      setShowScopeDialog(true);
-      return;
-    }
-
     try {
       const detail = await getConversation(item.id);
       const mapped: Message[] = detail.messages.map(m => ({
@@ -287,6 +281,12 @@ export default function App() {
         model: detail.model,
       }));
       setMessages(mapped);
+      // Legacy out-of-scope conversations have no assistant message saved
+      // (the backend used to skip persistence). Re-open the dialog in that
+      // case so the user still has a way to search the internet.
+      if (item.outOfScope && !mapped.some(m => m.type === 'answer' && m.text.trim() !== '')) {
+        setShowScopeDialog(true);
+      }
     } catch {
       setMessages([{
         id: 1,
