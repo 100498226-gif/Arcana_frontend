@@ -1,6 +1,6 @@
 import image_1Gmail_icon__2026__svg from '@/imports/1Gmail_icon__2026_.svg.png'
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { File, ChevronDown, FileText, Mic, ArrowUp, X, PanelRightClose, PanelRightOpen, Minimize2, Maximize2, Loader2, MoreVertical, Pin, PinOff, Trash2 } from 'lucide-react';
+import { File, ChevronDown, FileText, Mic, ArrowUp, X, PanelRightClose, PanelRightOpen, Minimize2, Maximize2, Loader2, MoreVertical, Pin, PinOff, Trash2, ArrowRight } from 'lucide-react';
 import { ImageWithFallback } from './components/figma/ImageWithFallback';
 import gmailIcon from '../imports/image.png';
 import slackIcon from '../imports/image-1.png';
@@ -397,7 +397,15 @@ export default function App() {
           <div className="flex-1 flex flex-col">
             {isFirstTime ? (
               /* First Time Welcome View */
-              <div className="flex-1 flex items-center justify-center py-4">
+              <div className="flex-1 flex items-center justify-center py-4 relative">
+                {/* Jump-to-secondary-view button (top-right of welcome panel) */}
+                <button
+                  onClick={() => setIsFirstTime(false)}
+                  className="absolute top-3 right-3 z-30 p-2 bg-teal-50 border border-teal-200 rounded-lg hover:bg-teal-100 transition-colors shadow-sm"
+                  title="Go to chat view"
+                >
+                  <ArrowRight className="w-4 h-4 text-teal-600" />
+                </button>
                 <div className="max-w-2xl w-full px-6">
                   <div className="text-center mb-4">
                     <div className="mb-2">
