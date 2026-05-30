@@ -506,9 +506,9 @@ export default function App() {
                           <span className="text-xl">●</span>
                         </div>
                         <div className="inline-block px-4 py-1.5 bg-teal-50 text-teal-700 rounded-full text-sm mb-6">
-                          Respuesta Actual
+                          Current Response
                         </div>
-                        <p className="text-gray-400">Las respuestas aparecerán aquí...</p>
+                        <p className="text-gray-400">Answers will appear here...</p>
                       </div>
                     ) : (
                       <div className="space-y-4">
