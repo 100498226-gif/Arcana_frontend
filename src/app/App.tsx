@@ -84,8 +84,18 @@ export default function App() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
 
+  // Normalize any model string to one of the two valid options.
+  // Coerces legacy / missing values (e.g. 'Gemini 2.5 Flash-Lite') so the
+  // UI never shows a label or icon for a model that is not in the dropdown.
+  const normalizeModel = (model: string | undefined): string => {
+    if (model === 'Qwen 3' || model === 'Gemma 4') return model;
+    return 'Qwen 3';
+  };
+
   const getModelIcon = (model: string) => {
-    return model === 'Qwen 3' ? geminiIcon : qwenIcon;
+    const m = normalizeModel(model);
+    if (m === 'Qwen 3') return qwenIcon;
+    return geminiIcon; // 'Gemma 4'
   };
 
   const loadHistory = useCallback(async () => {
@@ -248,7 +258,7 @@ export default function App() {
   const handleDeleteConversation = async (id: number, e: React.MouseEvent) => {
     e.stopPropagation();
     closeMenu();
-    // Optimistic update — remove instantly from UI, no waiting for network
+    // Optimistic update — remove instantly from UI
     setHistoryItems(prev => prev.filter(h => h.id !== id));
     if (pinnedIds.includes(id)) savePinned(pinnedIds.filter(p => p !== id));
     if (activeHistoryId === id) {
@@ -256,7 +266,14 @@ export default function App() {
       setActiveHistoryId(null);
       setActiveConversationId(null);
     }
-    deleteConversation(id); // fire-and-forget — UI already updated
+    try {
+      // Await the backend so subsequent loadHistory() calls (in onDone /
+      // onOutOfScope) can't race ahead of the commit and resurrect the item.
+      await deleteConversation(id);
+    } catch {
+      // Delete failed — re-sync from server so the UI does not lie.
+      loadHistory();
+    }
   };
 
   const handleHistoryClick = async (item: HistoryItem) => {
@@ -538,8 +555,8 @@ export default function App() {
                               <div className="flex items-center gap-2">
                                 <span className="text-xs text-gray-400">{message.timestamp}</span>
                                 <div className="flex items-center gap-1">
-                                  <img src={getModelIcon(selectedModel)} alt="" className="w-3.5 h-3.5" />
-                                  <span className="text-xs text-gray-400">{selectedModel}</span>
+                                  <img src={getModelIcon(normalizeModel(message.model))} alt="" className="w-3.5 h-3.5" />
+                                  <span className="text-xs text-gray-400">{normalizeModel(message.model)}</span>
                                 </div>
                               </div>
                               {message.type === 'answer' && message.source && (
@@ -782,7 +799,7 @@ export default function App() {
                         }`}
                       >
                         <div className="flex items-start gap-2 mb-1 pr-6">
-                          <img src={getModelIcon(selectedModel)} alt="" className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                          <img src={getModelIcon(normalizeModel(item.model))} alt="" className="w-4 h-4 mt-0.5 flex-shrink-0" />
                           <p className="text-sm text-gray-800 flex-1 leading-snug">{item.question}</p>
                         </div>
                         <div className="flex items-center gap-1.5 ml-6">

@@ -102,7 +102,8 @@ export async function getConversation(id: number): Promise<ConversationDetail> {
 }
 
 export async function deleteConversation(id: number): Promise<void> {
-  await fetch(`${BASE_URL}/conversations/${id}`, { method: 'DELETE' });
+  const res = await fetch(`${BASE_URL}/conversations/${id}`, { method: 'DELETE' });
+  if (!res.ok) throw new Error(`Failed to delete conversation: ${res.status}`);
 }
 
 export async function revealFile(absPath: string): Promise<void> {
