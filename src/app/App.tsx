@@ -537,12 +537,10 @@ export default function App() {
                             <div className="flex items-center justify-between mt-2">
                               <div className="flex items-center gap-2">
                                 <span className="text-xs text-gray-400">{message.timestamp}</span>
-                                {message.model && (
-                                  <div className="flex items-center gap-1">
-                                    <img src={getModelIcon(message.model)} alt="" className="w-3.5 h-3.5" />
-                                    <span className="text-xs text-gray-400">{message.model}</span>
-                                  </div>
-                                )}
+                                <div className="flex items-center gap-1">
+                                  <img src={getModelIcon(selectedModel)} alt="" className="w-3.5 h-3.5" />
+                                  <span className="text-xs text-gray-400">{selectedModel}</span>
+                                </div>
                               </div>
                               {message.type === 'answer' && message.source && (
                                 <button
@@ -784,7 +782,7 @@ export default function App() {
                         }`}
                       >
                         <div className="flex items-start gap-2 mb-1 pr-6">
-                          {item.model && <img src={getModelIcon(item.model)} alt="" className="w-4 h-4 mt-0.5 flex-shrink-0" />}
+                          <img src={getModelIcon(selectedModel)} alt="" className="w-4 h-4 mt-0.5 flex-shrink-0" />
                           <p className="text-sm text-gray-800 flex-1 leading-snug">{item.question}</p>
                         </div>
                         <div className="flex items-center gap-1.5 ml-6">
