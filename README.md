@@ -92,4 +92,4 @@ The frontend communicates with the backend via:
 
 ---
 
-*Arcana — built by Ignacio Chidom, 2026*
+*Arcana — built by Ignacio, 2026*
