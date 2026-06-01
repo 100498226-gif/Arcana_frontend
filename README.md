@@ -2,14 +2,14 @@
 
 The browser interface for Arcana, a personal document assistant. Built with React, TypeScript, Vite, and Tailwind CSS. Designed in Figma.
 
-This repo is the **source of truth for all design and UX decisions**. The backend (`ArcanaAI_whole-project`) adapts to match this interface, never the other way around.
+This repo is the **source of truth for all design and UX decisions**. The backend (`Arcana_backend`) adapts to match this interface, never the other way around.
 
 ---
 
 ## Prerequisites
 
 - Node.js 18+
-- The backend running at `http://localhost:8000` (see `ArcanaAI_whole-project`)
+- The backend running at `http://localhost:8000` (see `Arcana_backend`)
 
 ---
 
@@ -22,7 +22,7 @@ npm run dev       # starts the dev server at http://localhost:5173
 
 Open **http://localhost:5173** in any browser.
 
-For a full setup guide including the backend and overlay app, see the `ArcanaAI_whole-project` README.
+For a full setup guide including the backend and overlay app, see the `Arcana_backend` README.
 
 ---
 
