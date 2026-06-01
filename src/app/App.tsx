@@ -94,8 +94,8 @@ export default function App() {
 
   const getModelIcon = (model: string) => {
     const m = normalizeModel(model);
-    if (m === 'Qwen 3') return qwenIcon;
-    return geminiIcon; // 'Gemma 4'
+    if (m === 'Qwen 3') return geminiIcon;
+    return qwenIcon; // 'Gemma 4'
   };
 
   const loadHistory = useCallback(async () => {
